@@ -1,0 +1,96 @@
+-- Crear base de datos
+CREATE DATABASE dbElectivas;
+GO
+USE dbElectivas;
+GO
+
+-- Tabla de usuarios
+CREATE TABLE Usuarios (
+    id_usuario INT IDENTITY(1,1) PRIMARY KEY,
+    nombre_usuario VARCHAR(100) NOT NULL UNIQUE,
+    contraseña_usuario VARCHAR(100) NOT NULL,
+    Estado BIT
+);
+GO
+
+CREATE TABLE Carreras (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(100) NOT NULL,
+    Estado BIT NOT NULL
+);
+
+CREATE TABLE MateriasElectivas (
+    Id INT IDENTITY PRIMARY KEY,
+    Nombre NVARCHAR(100) NOT NULL,
+    CarreraId INT NOT NULL,
+    NumeroResolucion NVARCHAR(50),
+    FechaAprobacion DATE NOT NULL,
+    FechaVencimiento DATE NOT NULL,
+    Estado BIT NOT NULL,
+    FOREIGN KEY (CarreraId) REFERENCES Carreras(Id)
+);
+
+Insert Into Carreras (Nombre,Estado) Values
+('Ingeniería Civil',1),
+('Ingeniería en Energía Eléctrica',1),
+('Ingeniería en Industria Automotriz',1),
+('Ingeniería Mecánica',1),
+('Licenciatura en Organización Industrial',1);
+GO
+
+Insert Into Usuarios(nombre_usuario,contraseña_usuario) Values
+('jrios','1234');
+GO
+
+-- Materias Electivas de prueba
+INSERT INTO MateriasElectivas 
+(Nombre, CarreraId, NumeroResolucion, FechaAprobacion, FechaVencimiento, Estado)
+VALUES
+('Gestión de Proyectos de Construcción', 1, 'RES-2021-1001', '2021-03-01', '2026-03-01', 1),
+('Energías Renovables Aplicadas', 2, 'RES-2022-1002', '2022-05-15', '2027-05-15', 1),
+('Automatización de Vehículos', 3, 'RES-2020-1003', '2020-08-20', '2025-08-20', 1),
+('Diseño de Máquinas Avanzadas', 4, 'RES-2023-1004', '2023-02-10', '2028-02-10', 1),
+('Logística y Producción', 5, 'RES-2019-1005', '2019-09-12', '2024-09-12', 1),
+('Eficiencia Energética en Edificaciones', 1, 'RES-2021-1010', '2021-06-01', '2026-06-01', 1),
+('Movilidad Sustentable', 3, 'RES-2022-1011', '2022-04-25', '2027-04-25', 1),
+('Procesos de Manufactura Avanzada', 4, 'RES-2020-1012', '2020-07-18', '2025-07-18', 1);
+GO
+
+CREATE PROCEDURE sp_AgregarMateriaElectiva
+    @Nombre NVARCHAR(100),
+    @CarreraId INT,
+    @NumeroResolucion NVARCHAR(50),
+    @FechaAprobacion DATE,
+    @FechaVencimiento DATE,
+    @Estado BIT
+AS
+BEGIN
+    INSERT INTO MateriasElectivas (Nombre, CarreraId, NumeroResolucion, FechaAprobacion, FechaVencimiento, Estado)
+    VALUES (@Nombre, @CarreraId, @NumeroResolucion, @FechaAprobacion, @FechaVencimiento, @Estado);
+END;
+GO
+
+CREATE PROCEDURE spEditarMateria
+    @Id INT,
+    @Nombre NVARCHAR(100),
+    @CarreraId INT,
+    @NumeroResolucion NVARCHAR(50),
+    @FechaAprobacion DATE,
+    @FechaVencimiento DATE,
+    @Estado BIT
+AS
+BEGIN
+    UPDATE MateriasElectivas
+    SET 
+        Nombre = @Nombre,
+        CarreraId = @CarreraId,
+        NumeroResolucion = @NumeroResolucion,
+        FechaAprobacion = @FechaAprobacion,
+        FechaVencimiento = @FechaVencimiento,
+        Estado = @Estado
+    WHERE Id = @Id;
+END;
+GO 
+
+SELECT m.Id, m.Nombre, c.Nombre as Carrera ,m.NumeroResolucion, m.FechaAprobacion, m.FechaVencimiento, m.Estado 
+FROM MateriasElectivas m INNER JOIN Carreras c on c.Id = m.CarreraId
