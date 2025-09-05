@@ -55,6 +55,10 @@ namespace Control_Electivas
             this.dtpVencimiento = new System.Windows.Forms.DateTimePicker();
             this.btnGuardar = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
+            this.lblDesde = new System.Windows.Forms.Label();
+            this.txtDesde = new System.Windows.Forms.TextBox();
+            this.lblHasta = new System.Windows.Forms.Label();
+            this.txtHasta = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lblNombre
@@ -140,7 +144,7 @@ namespace Control_Electivas
             // 
             // btnGuardar
             // 
-            this.btnGuardar.Location = new System.Drawing.Point(150, 230);
+            this.btnGuardar.Location = new System.Drawing.Point(150, 287);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(90, 30);
             this.btnGuardar.TabIndex = 10;
@@ -149,16 +153,52 @@ namespace Control_Electivas
             // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(260, 230);
+            this.btnCancelar.Location = new System.Drawing.Point(260, 287);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(90, 30);
             this.btnCancelar.TabIndex = 11;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
+            // lblDesde
+            // 
+            this.lblDesde.AutoSize = true;
+            this.lblDesde.Location = new System.Drawing.Point(20, 216);
+            this.lblDesde.Name = "lblDesde";
+            this.lblDesde.Size = new System.Drawing.Size(41, 13);
+            this.lblDesde.TabIndex = 12;
+            this.lblDesde.Text = "Desde:";
+            // 
+            // txtDesde
+            // 
+            this.txtDesde.Location = new System.Drawing.Point(150, 216);
+            this.txtDesde.Name = "txtDesde";
+            this.txtDesde.Size = new System.Drawing.Size(200, 20);
+            this.txtDesde.TabIndex = 13;
+            // 
+            // lblHasta
+            // 
+            this.lblHasta.AutoSize = true;
+            this.lblHasta.Location = new System.Drawing.Point(20, 252);
+            this.lblHasta.Name = "lblHasta";
+            this.lblHasta.Size = new System.Drawing.Size(38, 13);
+            this.lblHasta.TabIndex = 14;
+            this.lblHasta.Text = "Hasta:";
+            // 
+            // txtHasta
+            // 
+            this.txtHasta.Location = new System.Drawing.Point(150, 252);
+            this.txtHasta.Name = "txtHasta";
+            this.txtHasta.Size = new System.Drawing.Size(200, 20);
+            this.txtHasta.TabIndex = 15;
+            // 
             // Editar
             // 
-            this.ClientSize = new System.Drawing.Size(400, 300);
+            this.ClientSize = new System.Drawing.Size(400, 349);
+            this.Controls.Add(this.lblHasta);
+            this.Controls.Add(this.txtHasta);
+            this.Controls.Add(this.lblDesde);
+            this.Controls.Add(this.txtDesde);
             this.Controls.Add(this.lblNombre);
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.lblCarrera);
@@ -180,6 +220,11 @@ namespace Control_Electivas
             this.PerformLayout();
 
         }
+
+        private System.Windows.Forms.Label lblDesde;
+        private System.Windows.Forms.TextBox txtDesde;
+        private System.Windows.Forms.Label lblHasta;
+        private System.Windows.Forms.TextBox txtHasta;
     }
 
     #endregion

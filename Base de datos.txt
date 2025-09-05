@@ -18,6 +18,7 @@ CREATE TABLE Carreras (
     Nombre NVARCHAR(100) NOT NULL,
     Estado BIT NOT NULL
 );
+GO
 
 CREATE TABLE MateriasElectivas (
     Id INT IDENTITY PRIMARY KEY,
@@ -26,9 +27,12 @@ CREATE TABLE MateriasElectivas (
     NumeroResolucion NVARCHAR(50),
     FechaAprobacion DATE NOT NULL,
     FechaVencimiento DATE NOT NULL,
+    Hasta NVARCHAR(50),
+    Desde NVARCHAR(50),
     Estado BIT NOT NULL,
     FOREIGN KEY (CarreraId) REFERENCES Carreras(Id)
 );
+GO
 
 Insert Into Carreras (Nombre,Estado) Values
 ('Ingeniería Civil',1),
@@ -44,17 +48,17 @@ GO
 
 -- Materias Electivas de prueba
 INSERT INTO MateriasElectivas 
-(Nombre, CarreraId, NumeroResolucion, FechaAprobacion, FechaVencimiento, Estado)
+(Nombre, CarreraId, NumeroResolucion, FechaAprobacion, FechaVencimiento, Desde, Hasta, Estado)
 VALUES
-('Gestión de Proyectos de Construcción', 1, 'RES-2021-1001', '2021-03-01', '2026-03-01', 1),
-('Energías Renovables Aplicadas', 2, 'RES-2022-1002', '2022-05-15', '2027-05-15', 1),
-('Automatización de Vehículos', 3, 'RES-2020-1003', '2020-08-20', '2025-08-20', 1),
-('Diseño de Máquinas Avanzadas', 4, 'RES-2023-1004', '2023-02-10', '2028-02-10', 1),
-('Logística y Producción', 5, 'RES-2019-1005', '2019-09-12', '2024-09-12', 1),
-('Eficiencia Energética en Edificaciones', 1, 'RES-2021-1010', '2021-06-01', '2026-06-01', 1),
-('Movilidad Sustentable', 3, 'RES-2022-1011', '2022-04-25', '2027-04-25', 1),
-('Procesos de Manufactura Avanzada', 4, 'RES-2020-1012', '2020-07-18', '2025-07-18', 1);
-GO
+('Inteligencia Artificial Aplicada', 1, 'RES-2024-2001', '2024-03-10', '2029-03-10', '2024', '2025', 1),
+('Nanotecnología y Materiales Avanzados', 2, 'RES-2023-2002', '2023-04-15', '2028-04-15', '2023', '2024', 1),
+('Robótica Colaborativa', 3, 'RES-2022-2003', '2022-09-20', '2027-09-20', '2022', '2023', 1),
+('Diseño Sustentable de Productos', 4, 'RES-2021-2004', '2021-11-05', '2026-11-05', '2021', '2022', 1),
+('Gestión de la Innovación Tecnológica', 5, 'RES-2020-2005', '2020-07-12', '2025-07-12', '2020', '2021', 1),
+('Biotecnología Industrial', 1, 'RES-2024-2006', '2024-05-18', '2029-05-18', '2024', '2025', 1),
+('Simulación Computacional de Fluidos', 2, 'RES-2023-2007', '2023-02-22', '2028-02-22', '2023', '2024', 1),
+('Ingeniería de Software Avanzada', 3, 'RES-2022-2008', '2022-08-30', '2027-08-30', '2022', '2023', 1);
+
 
 CREATE PROCEDURE sp_AgregarMateriaElectiva
     @Nombre NVARCHAR(100),
@@ -62,13 +66,18 @@ CREATE PROCEDURE sp_AgregarMateriaElectiva
     @NumeroResolucion NVARCHAR(50),
     @FechaAprobacion DATE,
     @FechaVencimiento DATE,
+    @Desde NVARCHAR(50),
+    @Hasta NVARCHAR(50),
     @Estado BIT
 AS
 BEGIN
-    INSERT INTO MateriasElectivas (Nombre, CarreraId, NumeroResolucion, FechaAprobacion, FechaVencimiento, Estado)
-    VALUES (@Nombre, @CarreraId, @NumeroResolucion, @FechaAprobacion, @FechaVencimiento, @Estado);
+    INSERT INTO MateriasElectivas 
+    (Nombre, CarreraId, NumeroResolucion, FechaAprobacion, FechaVencimiento, Desde, Hasta, Estado)
+    VALUES 
+    (@Nombre, @CarreraId, @NumeroResolucion, @FechaAprobacion, @FechaVencimiento, @Desde, @Hasta, @Estado);
 END;
 GO
+
 
 CREATE PROCEDURE spEditarMateria
     @Id INT,
@@ -77,6 +86,8 @@ CREATE PROCEDURE spEditarMateria
     @NumeroResolucion NVARCHAR(50),
     @FechaAprobacion DATE,
     @FechaVencimiento DATE,
+    @Desde NVARCHAR(50),
+    @Hasta NVARCHAR(50),
     @Estado BIT
 AS
 BEGIN
@@ -87,10 +98,9 @@ BEGIN
         NumeroResolucion = @NumeroResolucion,
         FechaAprobacion = @FechaAprobacion,
         FechaVencimiento = @FechaVencimiento,
+        Desde = @Desde,
+        Hasta = @Hasta,
         Estado = @Estado
     WHERE Id = @Id;
 END;
-GO 
-
-SELECT m.Id, m.Nombre, c.Nombre as Carrera ,m.NumeroResolucion, m.FechaAprobacion, m.FechaVencimiento, m.Estado 
-FROM MateriasElectivas m INNER JOIN Carreras c on c.Id = m.CarreraId
+GO

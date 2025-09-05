@@ -14,7 +14,19 @@ namespace DAO
         AccesoDatos ds = new AccesoDatos();
         public DataTable ObtenerMaterias()
         {
-            string consulta = "SELECT m.Id, m.Nombre, c.Nombre as Carrera,  m.CarreraId ,m.NumeroResolucion, m.FechaAprobacion, m.FechaVencimiento FROM MateriasElectivas m INNER JOIN Carreras c on c.Id = m.CarreraId WHERE m.Estado = 1";
+            string consulta = @"SELECT m.Id, 
+                                   c.Nombre AS Carrera,                               
+                                   m.Nombre AS [Materias Electivas],   
+                                   m.CarreraId,
+                                   m.NumeroResolucion AS [Resolución de Habilitación], 
+                                   m.FechaAprobacion AS [Fecha de Resolucion Habilitación], 
+                                   m.FechaVencimiento,
+                                   m.Desde,
+                                   m.Hasta,
+                                   m.Estado
+                            FROM MateriasElectivas m 
+                            INNER JOIN Carreras c ON c.Id = m.CarreraId 
+                            WHERE m.Estado = 1";
             return ds.obtenerTablaId(consulta);
         }
         public bool Agregar(MateriaElectiva materia)
@@ -28,8 +40,7 @@ namespace DAO
                 ArmarParametrosMateriaAgregar(ref comando, materia);
 
                 int filas = ds.EjectuarProcedimientoAlmacenado(comando, "sp_AgregarMateriaElectiva");
-                if (filas > 0) return true;
-                else return false;
+                return filas > 0;
             }
             catch (Exception)
             {
@@ -39,19 +50,14 @@ namespace DAO
 
         private void ArmarParametrosMateriaAgregar(ref SqlCommand comando, MateriaElectiva materia)
         {
-            SqlParameter SqlParametros;
-            SqlParametros = comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100);
-            SqlParametros.Value = materia.Nombre;
-            SqlParametros = comando.Parameters.Add("@CarreraId", SqlDbType.Int);
-            SqlParametros.Value = materia.IdCarrera.Id;
-            SqlParametros = comando.Parameters.Add("@NumeroResolucion", SqlDbType.NVarChar, 50);
-            SqlParametros.Value = materia.NumeroResolucion;
-            SqlParametros = comando.Parameters.Add("@FechaAprobacion", SqlDbType.Date);
-            SqlParametros.Value = materia.FechaAprobacion;
-            SqlParametros = comando.Parameters.Add("@FechaVencimiento", SqlDbType.Date);
-            SqlParametros.Value = materia.FechaVencimiento;
-            SqlParametros = comando.Parameters.Add("@Estado", SqlDbType.Bit);
-            SqlParametros.Value = materia.Estado;
+            comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100).Value = materia.Nombre;
+            comando.Parameters.Add("@CarreraId", SqlDbType.Int).Value = materia.IdCarrera.Id;
+            comando.Parameters.Add("@NumeroResolucion", SqlDbType.NVarChar, 50).Value = materia.NumeroResolucion;
+            comando.Parameters.Add("@FechaAprobacion", SqlDbType.Date).Value = materia.FechaAprobacion;
+            comando.Parameters.Add("@FechaVencimiento", SqlDbType.Date).Value = materia.FechaVencimiento;
+            comando.Parameters.Add("@Desde", SqlDbType.NVarChar, 50).Value = materia.Desde;
+            comando.Parameters.Add("@Hasta", SqlDbType.NVarChar, 50).Value = materia.Hasta;
+            comando.Parameters.Add("@Estado", SqlDbType.Bit).Value = materia.Estado;
         }
 
         public MateriaElectiva BuscarPorNumeroResolucion(string numeroResolucion)
@@ -83,7 +89,9 @@ namespace DAO
                 SqlCommand comando = new SqlCommand();
                 comando.CommandType = CommandType.StoredProcedure;
                 comando.CommandText = "spEditarMateria";
+
                 ArmarParametrosMateriaEditar(ref comando, materia);
+
                 int filas = ds.EjectuarProcedimientoAlmacenado(comando, "spEditarMateria");
                 return filas > 0;
             }
@@ -95,21 +103,15 @@ namespace DAO
 
         private void ArmarParametrosMateriaEditar(ref SqlCommand comando, MateriaElectiva materia)
         {
-            SqlParameter SqlParametros;
-            SqlParametros = comando.Parameters.Add("@Id", SqlDbType.Int);
-            SqlParametros.Value = materia.Id;
-            SqlParametros = comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100);
-            SqlParametros.Value = materia.Nombre;
-            SqlParametros = comando.Parameters.Add("@CarreraId", SqlDbType.Int);
-            SqlParametros.Value = materia.IdCarrera.Id;
-            SqlParametros = comando.Parameters.Add("@NumeroResolucion", SqlDbType.NVarChar, 50);
-            SqlParametros.Value = materia.NumeroResolucion;
-            SqlParametros = comando.Parameters.Add("@FechaAprobacion", SqlDbType.Date);
-            SqlParametros.Value = materia.FechaAprobacion;
-            SqlParametros = comando.Parameters.Add("@FechaVencimiento", SqlDbType.Date);
-            SqlParametros.Value = materia.FechaVencimiento;
-            SqlParametros = comando.Parameters.Add("@Estado", SqlDbType.Bit);
-            SqlParametros.Value = materia.Estado;
+            comando.Parameters.Add("@Id", SqlDbType.Int).Value = materia.Id;
+            comando.Parameters.Add("@Nombre", SqlDbType.NVarChar, 100).Value = materia.Nombre;
+            comando.Parameters.Add("@CarreraId", SqlDbType.Int).Value = materia.IdCarrera.Id;
+            comando.Parameters.Add("@NumeroResolucion", SqlDbType.NVarChar, 50).Value = materia.NumeroResolucion;
+            comando.Parameters.Add("@FechaAprobacion", SqlDbType.Date).Value = materia.FechaAprobacion;
+            comando.Parameters.Add("@FechaVencimiento", SqlDbType.Date).Value = materia.FechaVencimiento;
+            comando.Parameters.Add("@Desde", SqlDbType.NVarChar, 50).Value = materia.Desde;
+            comando.Parameters.Add("@Hasta", SqlDbType.NVarChar, 50).Value = materia.Hasta;
+            comando.Parameters.Add("@Estado", SqlDbType.Bit).Value = materia.Estado;
         }
 
         public bool DarDeBaja(int id)
@@ -120,19 +122,44 @@ namespace DAO
             return ds.EjecutarSQL(comando) > 0;
         }
 
-        public DataTable ListarMateriasPorVencer(int meses)
+        public DataTable ListarMateriasPorVencer(int meses, int Años)
         {
-            string consulta = "SELECT m.Id, m.Nombre, c.Nombre AS Carrera, m.CarreraId, m.NumeroResolucion,m.FechaAprobacion, m.FechaVencimiento FROM MateriasElectivas m INNER JOIN Carreras c ON c.Id = m.CarreraId WHERE m.Estado = 1 AND m.FechaVencimiento BETWEEN GETDATE() AND DATEADD(MONTH, @Meses, GETDATE());";
+            string consulta = @"SELECT m.Id, 
+                                   c.Nombre AS Carrera,                               
+                                   m.Nombre AS [Materias Electivas],   
+                                   m.CarreraId,
+                                   m.NumeroResolucion AS [Resolución de Habilitación], 
+                                   m.FechaAprobacion AS [Fecha de Resolucion Habilitación], 
+                                   m.FechaVencimiento,
+                                   m.Desde,
+                                   m.Hasta,
+                                   m.Estado
+                            FROM MateriasElectivas m 
+                            INNER JOIN Carreras c ON c.Id = m.CarreraId 
+                            WHERE m.Estado = 1 AND m.FechaVencimiento > DATEADD(MONTH, @Meses, GETDATE()) AND m.FechaVencimiento < DATEADD(YEAR, @Años, GETDATE());";
 
             SqlCommand comando = new SqlCommand(consulta);
             comando.Parameters.AddWithValue("@Meses", meses);
+            comando.Parameters.AddWithValue("@Años", Años);
 
             return ds.ConsultaTabla(comando, "MateriasPorVencer");
         }
 
         public DataTable ListarMateriasVencidas()
         {
-            string consulta = "SELECT m.Id, m.Nombre, c.Nombre AS Carrera, m.CarreraId, m.NumeroResolucion, m.FechaAprobacion, m.FechaVencimiento FROM MateriasElectivas m INNER JOIN Carreras c ON c.Id = m.CarreraId WHERE m.Estado = 1 AND m.FechaVencimiento < GETDATE();";
+            string consulta = @"SELECT m.Id, 
+                                   c.Nombre AS Carrera,                               
+                                   m.Nombre AS [Materias Electivas],   
+                                   m.CarreraId,
+                                   m.NumeroResolucion AS [Resolución de Habilitación], 
+                                   m.FechaAprobacion AS [Fecha de Resolucion Habilitación], 
+                                   m.FechaVencimiento,
+                                   m.Desde,
+                                   m.Hasta,
+                                   m.Estado
+                            FROM MateriasElectivas m 
+                            INNER JOIN Carreras c ON c.Id = m.CarreraId 
+                            WHERE m.Estado = 1 AND m.FechaVencimiento < GETDATE();";
 
             SqlCommand comando = new SqlCommand(consulta);
             return ds.ConsultaTabla(comando, "MateriasVencidas");

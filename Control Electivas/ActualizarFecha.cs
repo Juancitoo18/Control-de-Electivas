@@ -35,12 +35,14 @@ namespace Control_Electivas
         {
             DateTime fechaAprobacion = dtpFechaInicio.Value;
             DateTime fechaVencimiento = dtpFechaVencimiento.Value;
-
+            
             MateriaElectiva materia = new MateriaElectiva
             {
                 Id = idMateria,
                 FechaAprobacion = fechaAprobacion,
-                FechaVencimiento = fechaVencimiento
+                FechaVencimiento = fechaVencimiento,
+                Desde = fechaAprobacion.Year.ToString(),
+                Hasta = fechaVencimiento.Year.ToString()
             };
 
             

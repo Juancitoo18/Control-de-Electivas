@@ -27,6 +27,7 @@ namespace Control_Electivas
 
         private void btnGuardar_Click(object sender, EventArgs e)
         {
+
             MateriaElectiva existente = NegMate.BuscarPorNumeroResolucion(txtResolucion.Text);
 
             if (existente != null && existente.Id != Mate.Id)
@@ -92,6 +93,8 @@ namespace Control_Electivas
             Mate.NumeroResolucion = txtResolucion.Text;
             Mate.FechaAprobacion = dtpAprobacion.Value;
             Mate.FechaVencimiento = dtpVencimiento.Value;
+            Mate.Desde = Mate.FechaAprobacion.Year.ToString();
+            Mate.Hasta = Mate.FechaVencimiento.Year.ToString();
             Mate.Estado = true;
 
             return Mate;

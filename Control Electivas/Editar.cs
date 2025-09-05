@@ -38,6 +38,8 @@ namespace Control_Electivas
             txtResolucion.Text = Mate.NumeroResolucion;
             dtpAprobacion.Value = Mate.FechaAprobacion;
             dtpVencimiento.Value = Mate.FechaVencimiento;
+            txtDesde.Text = Mate.Desde;
+            txtHasta.Text = Mate.Hasta;
         }
 
         private void btnGuardar_Click(object sender, EventArgs e)
@@ -47,6 +49,8 @@ namespace Control_Electivas
             Mate.NumeroResolucion = txtResolucion.Text;
             Mate.FechaAprobacion = dtpAprobacion.Value;
             Mate.FechaVencimiento = dtpVencimiento.Value;
+            Mate.Desde = txtDesde.Text;
+            Mate.Hasta = txtHasta.Text;
 
             if (neg.EditarMateria(Mate))
             {

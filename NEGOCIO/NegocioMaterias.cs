@@ -41,9 +41,9 @@ namespace NEGOCIO
             return DaoMateria.DarDeBaja(id);
         }
 
-        public DataTable ListarMateriasPorVencer(int meses)
+        public DataTable ListarMateriasPorVencer(int meses, int años)
         {
-            return DaoMateria.ListarMateriasPorVencer(meses);
+            return DaoMateria.ListarMateriasPorVencer(meses, años);
         }
 
         public DataTable ListarMateriasVencidas()
