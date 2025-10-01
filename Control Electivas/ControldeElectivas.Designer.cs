@@ -45,10 +45,12 @@ namespace Control_Electivas
             this.listadosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmMateriasPorVencer = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmMateriasVencidas = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmFiltro = new System.Windows.Forms.ToolStripMenuItem();
             this.usuarioToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmCambiarContraseña = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmCerrarSesion = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmFiltro = new System.Windows.Forms.ToolStripMenuItem();
+            this.generaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.porCarreraToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvMaterias)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -192,6 +194,16 @@ namespace Control_Electivas
             this.tsmMateriasVencidas.Text = "Materias Vencidas";
             this.tsmMateriasVencidas.Click += new System.EventHandler(this.tsmMateriasVencidas_Click);
             // 
+            // tsmFiltro
+            // 
+            this.tsmFiltro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.generaToolStripMenuItem,
+            this.porCarreraToolStripMenuItem});
+            this.tsmFiltro.Name = "tsmFiltro";
+            this.tsmFiltro.Size = new System.Drawing.Size(180, 22);
+            this.tsmFiltro.Text = "Filtro";
+            this.tsmFiltro.Click += new System.EventHandler(this.tsmFiltro_Click);
+            // 
             // usuarioToolStripMenuItem
             // 
             this.usuarioToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -215,12 +227,17 @@ namespace Control_Electivas
             this.tsmCerrarSesion.Text = "Cerrar Sesion";
             this.tsmCerrarSesion.Click += new System.EventHandler(this.tsmCerrarSesion_Click);
             // 
-            // tsmFiltro
+            // generaToolStripMenuItem
             // 
-            this.tsmFiltro.Name = "tsmFiltro";
-            this.tsmFiltro.Size = new System.Drawing.Size(180, 22);
-            this.tsmFiltro.Text = "Filtro";
-            this.tsmFiltro.Click += new System.EventHandler(this.tsmFiltro_Click);
+            this.generaToolStripMenuItem.Name = "generaToolStripMenuItem";
+            this.generaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.generaToolStripMenuItem.Text = "Genera";
+            // 
+            // porCarreraToolStripMenuItem
+            // 
+            this.porCarreraToolStripMenuItem.Name = "porCarreraToolStripMenuItem";
+            this.porCarreraToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.porCarreraToolStripMenuItem.Text = "Por Carrera";
             // 
             // ControldeElectivas
             // 
@@ -268,5 +285,7 @@ namespace Control_Electivas
         private System.Windows.Forms.ToolStripMenuItem tsmCambiarContraseña;
         private System.Windows.Forms.ToolStripMenuItem tsmCerrarSesion;
         private System.Windows.Forms.ToolStripMenuItem tsmFiltro;
+        private System.Windows.Forms.ToolStripMenuItem generaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem porCarreraToolStripMenuItem;
     }
 }
